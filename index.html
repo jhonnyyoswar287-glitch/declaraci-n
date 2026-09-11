@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¿Quieres ser mi novia? 💕</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@400;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a0a0a 0%, #2d0a1a 40%, #1a0a1a 100%);
+            font-family: 'Quicksand', sans-serif;
+            overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            color: #fff;
+        }
+
+        /* Corazones de fondo kawaii */
+        .hearts-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 20px;
+            opacity: 0.15;
+            animation: floatHeart 12s infinite ease-in-out;
+            color: #ff69b4;
+        }
+
+        .heart:nth-child(odd) {
+            color: #ff1493;
+            font-size: 28px;
+        }
+
+        .heart:nth-child(3n) {
+            color: #ff4d6d;
+            font-size: 16px;
+        }
+
+        @keyframes floatHeart {
+            0% {
+                transform: translateY(100vh) rotate(0deg) scale(0.5);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.2;
+            }
+            90% {
+                opacity: 0.15;
+            }
+            100% {
+                transform: translateY(-20vh) rotate(360deg) scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 40px 30px;
+            max-width: 520px;
+            width: 90%;
+            background: rgba(20, 5, 15, 0.85);
+            border-radius: 30px;
+            border: 3px solid #ff4d6d;
+            box-shadow: 
+                0 0 30px rgba(255, 77, 109, 0.4),
+                0 0 60px rgba(255, 105, 180, 0.2),
+                inset 0 0 20px rgba(255, 105, 180, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .kawaii-face {
+            font-size: 60px;
+            margin-bottom: 10px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        h1 {
+            font-family: 'Pacifico', cursive;
+            font-size: 2.2rem;
+            color: #ff69b4;
+            text-shadow: 
+                0 0 10px rgba(255, 105, 180, 0.8),
+                0 0 20px rgba(255, 77, 109, 0.5);
+            margin-bottom: 15px;
+            line-height: 1.3;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: #ffb6c1;
+            margin-bottom: 35px;
+            font-weight: 600;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            flex-wrap: wrap;
+            position: relative;
+            min-height: 70px;
+        }
+
+        .btn {
+            padding: 14px 36px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Quicksand', sans-serif;
+            position: relative;
+            z-index: 5;
+        }
+
+        .btn-si {
+            background: linear-gradient(135deg, #ff4d6d, #ff69b4);
+            color: white;
+            box-shadow: 0 6px 20px rgba(255, 77, 109, 0.5);
+            border: 2px solid #ffb6c1;
+        }
+
+        .btn-si:hover {
+            transform: scale(1.08);
+            box-shadow: 0 8px 30px rgba(255, 105, 180, 0.7);
+            background: linear-gradient(135deg, #ff69b4, #ff4d6d);
+        }
+
+        .btn-no {
+            background: linear-gradient(135deg, #3a1a1a, #5a2a2a);
+            color: #ffb6c1;
+            border: 2px solid #ff4d6d;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        .btn-no:hover {
+            background: linear-gradient(135deg, #5a2a2a, #3a1a1a);
+        }
+
+        /* Pantalla de poemas */
+        .poems-screen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a0a0a 0%, #2d0a1a 50%, #1a0a1a 100%);
+            z-index: 100;
+            overflow-y: auto;
+            padding: 40px 20px;
+        }
+
+        .poems-container {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .poems-container h2 {
+            font-family: 'Pacifico', cursive;
+            font-size: 2.5rem;
+            color: #ff69b4;
+            text-shadow: 0 0 15px rgba(255, 105, 180, 0.7);
+            margin-bottom: 10px;
+        }
+
+        .poems-container .hearts-line {
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            letter-spacing: 8px;
+        }
+
+        .poem {
+            background: rgba(30, 10, 20, 0.9);
+            border: 2px solid #ff4d6d;
+            border-radius: 20px;
+            padding: 25px 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 0 25px rgba(255, 77, 109, 0.3);
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .poem::before {
+            content: '💕';
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 1.5rem;
+            opacity: 0.4;
+        }
+
+        .poem h3 {
+            color: #ff69b4;
+            font-size: 1.3rem;
+            margin-bottom: 12px;
+            font-family: 'Pacifico', cursive;
+        }
+
+        .poem p {
+            color: #ffc0cb;
+            font-size: 1.05rem;
+            line-height: 1.7;
+            white-space: pre-line;
+        }
+
+        .final-message {
+            margin-top: 40px;
+            padding: 30px;
+            background: linear-gradient(135deg, rgba(255, 77, 109, 0.2), rgba(255, 105, 180, 0.2));
+            border-radius: 25px;
+            border: 2px solid #ff69b4;
+        }
+
+        .final-message p {
+            font-size: 1.3rem;
+            color: #fff;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .final-message .big-heart {
+            font-size: 3rem;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #ff69b4;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: sparkleAnim 1s forwards;
+        }
+
+        @keyframes sparkleAnim {
+            0% { transform: scale(0); opacity: 1; }
+            100% { transform: scale(2) translateY(-30px); opacity: 0; }
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            h1 { font-size: 1.7rem; }
+            .btn { padding: 12px 28px; font-size: 1.1rem; }
+            .kawaii-face { font-size: 48px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="hearts-bg" id="heartsBg"></div>
+
+    <div class="container" id="mainContainer">
+        <div class="kawaii-face">🥺💕</div>
+        <h1>¿Quieres ser mi novia?</h1>
+        <p class="subtitle">Mi corazón late solo por ti... 💖</p>
+        
+        <div class="buttons">
+            <button class="btn btn-si" id="btnSi">¡Sí! 💖</button>
+            <button class="btn btn-no" id="btnNo">No 😢</button>
+        </div>
+    </div>
+
+    <div class="poems-screen" id="poemsScreen">
+        <div class="poems-container">
+            <h2>¡Síiiii! 🎉💕</h2>
+            <div class="hearts-line">💖 💗 💓 💝 💘</div>
+            
+            <div class="poem">
+                <h3>Para ti, mi amor</h3>
+                <p>En este mundo de estrellas y sueños,
+tu sonrisa es mi luz más brillante.
+Cada latido de mi corazón
+susurra tu nombre con amor constante.
+
+Eres la razón de mis días felices,
+el poema que nunca termina de escribir.
+Si aceptas ser mía para siempre,
+prometo hacerte sonreír sin fin.</p>
+            </div>
+
+            <div class="poem">
+                <h3>Mi promesa eterna</h3>
+                <p>No te prometo un cielo sin nubes,
+ni un camino siempre de flores.
+Te prometo estar a tu lado
+en las noches y en los amores.
+
+Te prometo cuidar tu sonrisa
+como el más preciado tesoro.
+Porque desde que te conocí,
+mi vida tiene un nuevo color.</p>
+            </div>
+
+            <div class="poem">
+                <h3>Corazones kawaii</h3>
+                <p>Eres mi estrella, mi sol, mi luna,
+mi razón para soñar despierta.
+Con cada "sí" que me regalas,
+el universo se vuelve más tierno.
+
+Que nuestros días se llenen de risas,
+de abrazos suaves y besos dulces.
+Hoy mi corazón grita de alegría:
+¡Por fin eres mía, mi dulce luz!</p>
+            </div>
+
+            <div class="final-message">
+                <p>Gracias por decir que sí 🥺💖</p>
+                <p>Ahora somos oficiales... ¡te quiero mucho!</p>
+                <div class="big-heart">💗</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Crear corazones de fondo
+        const heartsBg = document.getElementById('heartsBg');
+        const heartEmojis = ['❤️', '💕', '💗', '💖', '💘', '💝', '🩷', '💓'];
+        
+        for (let i = 0; i < 25; i++) {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDelay = Math.random() * 12 + 's';
+            heart.style.animationDuration = (10 + Math.random() * 8) + 's';
+            heartsBg.appendChild(heart);
+        }
+
+        const btnNo = document.getElementById('btnNo');
+        const btnSi = document.getElementById('btnSi');
+        const poemsScreen = document.getElementById('poemsScreen');
+        const mainContainer = document.getElementById('mainContainer');
+
+        let noClicks = 0;
+        const messagesNo = [
+            "¿Segura? 🥺",
+            "¿De verdad? 😢",
+            "Piénsalo bien... 💕",
+            "¡No seas mala! 😭",
+            "Mi corazón se rompe... 💔",
+            "¿Otra vez? 🥺",
+            "Por favorcito... 💖",
+            "¡Solo di que sí! 🥹"
+        ];
+
+        // El botón NO se mueve o se hace más pequeño
+        btnNo.addEventListener('mouseover', moveNoButton);
+        btnNo.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            moveNoButton();
+            noClicks++;
+            
+            // Cambiar texto del botón
+            if (noClicks < messagesNo.length) {
+                btnNo.textContent = messagesNo[noClicks];
+            } else {
+                btnNo.textContent = "¡Imposible! 😤";
+            }
+
+            // Hacer más pequeño
+            const currentScale = parseFloat(btnNo.style.transform.replace(/[^0-9.]/g, '')) || 1;
+            const newScale = Math.max(0.4, currentScale - 0.08);
+            btnNo.style.transform = `scale(${newScale})`;
+            btnNo.style.fontSize = Math.max(0.7, 1.2 - noClicks * 0.05) + 'rem';
+            btnNo.style.padding = Math.max(6, 14 - noClicks) + 'px ' + Math.max(12, 36 - noClicks * 2) + 'px';
+        });
+
+        function moveNoButton() {
+            const container = document.querySelector('.buttons');
+            const containerRect = container.getBoundingClientRect();
+            const btnRect = btnNo.getBoundingClientRect();
+            
+            // Mover a posición aleatoria dentro del área visible
+            const maxX = window.innerWidth - btnRect.width - 20;
+            const maxY = window.innerHeight - btnRect.height - 20;
+            
+            const newX = Math.random() * maxX;
+            const newY = Math.random() * maxY;
+            
+            btnNo.style.position = 'fixed';
+            btnNo.style.left = newX + 'px';
+            btnNo.style.top = newY + 'px';
+            btnNo.style.zIndex = '50';
+            btnNo.style.transition = 'all 0.3s ease';
+        }
+
+        // Botón SÍ
+        btnSi.addEventListener('click', function() {
+            // Efecto de sparkles
+            createSparkles();
+            
+            // Mostrar poemas
+            setTimeout(() => {
+                mainContainer.style.display = 'none';
+                poemsScreen.style.display = 'block';
+                // Crear más corazones
+                for (let i = 0; i < 15; i++) {
+                    const heart = document.createElement('div');
+                    heart.className = 'heart';
+                    heart.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+                    heart.style.left = Math.random() * 100 + 'vw';
+                    heart.style.animationDelay = Math.random() * 5 + 's';
+                    heart.style.animationDuration = (8 + Math.random() * 6) + 's';
+                    heart.style.opacity = '0.3';
+                    heartsBg.appendChild(heart);
+                }
+            }, 400);
+        });
+
+        function createSparkles() {
+            for (let i = 0; i < 20; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                sparkle.style.left = (btnSi.getBoundingClientRect().left + Math.random() * 100) + 'px';
+                sparkle.style.top = (btnSi.getBoundingClientRect().top + Math.random() * 40) + 'px';
+                sparkle.style.background = ['#ff69b4', '#ff4d6d', '#ffb6c1', '#fff'][Math.floor(Math.random() * 4)];
+                document.body.appendChild(sparkle);
+                setTimeout(() => sparkle.remove(), 1000);
+            }
+        }
+
+        // También hacer que el botón NO se mueva al intentar tocarlo en móvil
+        btnNo.addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            moveNoButton();
+        });
+    </script>
+</body>
+</html>
